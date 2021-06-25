@@ -1,0 +1,272 @@
+-- 테이블 순서는 관계를 고려하여 한 번에 실행해도 에러가 발생하지 않게 정렬되었습니다.
+
+-- User Table Create SQL
+CREATE TABLE User
+(
+    `id`               INT            NOT NULL    AUTO_INCREMENT, 
+    `nickname`         VARCHAR(45)    NOT NULL, 
+    `profilePhotoUrl`  TEXT           NOT NULL, 
+    `phoneNumber`      VARCHAR(45)    NOT NULL, 
+    `email`            VARCHAR(45)    NULL, 
+    `mannerMeter`      FLOAT          NOT NULL    DEFAULT 36.5, 
+    `status`           VARCHAR(45)    NOT NULL    DEFAULT 'ACTIVE' COMMENT 'ACTIVE, DEACTIVE, DELETED', 
+    `updatedAt`        TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`        TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP, 
+    PRIMARY KEY (id)
+);
+
+
+-- User Table Create SQL
+CREATE TABLE BlockedUser
+(
+    `userId`         INT          NOT NULL, 
+    `blockedUserId`  INT          NOT NULL, 
+    `isDeleted`      CHAR(1)      NOT NULL    DEFAULT 'Y' COMMENT 'N: unblocked', 
+    `updatedAt`      TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`      TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE UserItemSeenHistory
+(
+    `userId`         INT          NOT NULL, 
+    `seenProductId`  INT          NOT NULL, 
+    `updatedAt`      TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`      TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE UserSearchHistory
+(
+    `userId`        INT          NOT NULL, 
+    `searchString`  TEXT         NOT NULL, 
+    `updatedAt`     TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`     TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE Follow
+(
+    `userId`        INT          NOT NULL, 
+    `followUserId`  INT          NOT NULL, 
+    `isFollow`      CHAR(1)      NOT NULL    DEFAULT 'Y' COMMENT 'N: unfollow', 
+    `updatedAt`     TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`     TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE Item
+(
+    `id`             INT            NOT NULL    AUTO_INCREMENT, 
+    `userId`         INT            NOT NULL, 
+    `title`          TEXT           NOT NULL, 
+    `categoryId`     TEXT           NOT NULL, 
+    `locationId`     INT            NOT NULL, 
+    `price`          INT            NULL, 
+    `isNegotiation`  CHAR(1)        NOT NULL    DEFAULT 'N' COMMENT 'Y: price proposal exists', 
+    `contents`       TEXT           NOT NULL, 
+    `isBoosted`      CHAR(1)        NOT NULL    DEFAULT 'N' COMMENT 'Y: boosted item', 
+    `boostTime`      TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP, 
+    `status`         VARCHAR(45)    NOT NULL    DEFAULT 'ONSALE' COMMENT 'ONSALE, RESERVATED, COMPLETED, HIDDEN', 
+    `updatedAt`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`      TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP, 
+    PRIMARY KEY (id)
+);
+
+
+-- User Table Create SQL
+CREATE TABLE ItemMedia
+(
+    `itemId`     INT          NOT NULL, 
+    `order`      INT          NOT NULL, 
+    `photoUrl`   TEXT         NOT NULL, 
+    `updatedAt`  TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`  TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE Chatroom
+(
+    `id`         INT          NOT NULL, 
+    `itemId`     INT          NOT NULL, 
+    `buyerId`    INT          NOT NULL, 
+    `isDeleted`  CHAR(1)      NOT NULL    DEFAULT 'N' COMMENT 'Y: deleted', 
+    `updatedAt`  TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`  TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE Message
+(
+    `chatroomId`  INT            NOT NULL, 
+    `senderId`    INT            NOT NULL, 
+    `contents`    TEXT           NOT NULL, 
+    `type`        VARCHAR(45)    NOT NULL    DEFAULT 'TEXT' COMMENT 'TEXT, IMAGE, EMOTICON', 
+    `isSeen`      CHAR(1)        NOT NULL    DEFAULT 'N' COMMENT 'Y: seen', 
+    `updatedAt`   TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`   TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE UserLocation
+(
+    `userId`      INT          NOT NULL, 
+    `locationId`  INT          NOT NULL, 
+    `updatedAt`   TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`   TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE Likes
+(
+    `userId`     INT          NOT NULL, 
+    `postId`     INT          NOT NULL, 
+    `isLike`     CHAR(1)      NOT NULL    DEFAULT 'Y' COMMENT 'N: unlike', 
+    `updatedAt`  TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`  TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE Badges
+(
+    `id`         INT            NOT NULL, 
+    `badgeName`  VARCHAR(45)    NOT NULL    COMMENT 'DEAL, TRUST, REGULARCUSTORMER, COMPLIMENT, WARMTH, TRADING, REVIEW, HOLIC, TASTE, MEMORY, ATTRACTION, TIME, WALK, EMPTYING, INVITAION, MINIMALIST, KINDSELLER, SENSE, CHAMPION, NEIGHBORHOOD, NATIVE, COMMENT, MASTERSELLER, SHARING, COFFEECOLLECTOR', 
+    `updatedAt`  TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`  TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE Review
+(
+    `itemId`      INT          NOT NULL, 
+    `userId`      INT          NOT NULL, 
+    `locationId`  INT          NOT NULL, 
+    `contents`    TEXT         NOT NULL, 
+    `imageUrl`    TEXT         NULL, 
+    `isSeller`    CHAR(1)      NOT NULL    DEFAULT 'Y' COMMENT 'N: buyer', 
+    `updatedAt`   TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`   TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE UserPositiveFeedback
+(
+    `userId`              INT          NOT NULL, 
+    `reviewedUserId`      INT          NOT NULL, 
+    `positiveFeedbackId`  INT          NOT NULL, 
+    `updatedAt`           TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`           TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE Location
+(
+    `id`         INT            NOT NULL    AUTO_INCREMENT, 
+    `name`       VARCHAR(45)    NOT NULL, 
+    `logitude`   FLOAT          NOT NULL, 
+    `latitude`   FLOAT          NOT NULL, 
+    `updatedAt`  TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`  TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP, 
+    PRIMARY KEY (id)
+);
+
+
+-- User Table Create SQL
+CREATE TABLE itemCategory
+(
+    `id`            INT            NOT NULL    AUTO_INCREMENT, 
+    `categoryName`  VARCHAR(45)    NOT NULL    COMMENT 'DIGITAL, INTERIOR, CHILDREN, LIFE, SPORTS, ACCESSORIES, WOMAN, MAN, GAME, BEAUTY, PET, BOOK, PLANT, ETC, BUY', 
+    `updatedAt`     TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`     TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP, 
+    PRIMARY KEY (id)
+);
+
+
+-- User Table Create SQL
+CREATE TABLE UserBadges
+(
+    `userId`     INT          NOT NULL, 
+    `badgeId`    INT          NOT NULL, 
+    `updatedAt`  TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`  TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE BuyHistory
+(
+    `itemId`     INT          NOT NULL, 
+    `userId`     INT          NOT NULL, 
+    `updatedAt`  TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`  TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE PositiveFeedback
+(
+    `id`         INT            NOT NULL    AUTO_INCREMENT, 
+    `title`      VARCHAR(45)    NOT NULL, 
+    `updatedAt`  TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`  TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP, 
+    PRIMARY KEY (id)
+);
+
+
+-- User Table Create SQL
+CREATE TABLE BlockedItem
+(
+    `userId`         INT            NOT NULL, 
+    `blockedItemId`  INT            NOT NULL, 
+    `isDeleted`      VARCHAR(45)    NOT NULL    DEFAULT 'Y' COMMENT 'N: unblocked', 
+    `updatedAt`      TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`      TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE NegativeFeedback
+(
+    `id`         INT            NOT NULL    AUTO_INCREMENT, 
+    `title`      VARCHAR(45)    NOT NULL, 
+    `updatedAt`  TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`  TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP, 
+    PRIMARY KEY (id)
+);
+
+
+-- User Table Create SQL
+CREATE TABLE UserNegativeFeedback
+(
+    `userId`              INT          NOT NULL, 
+    `reviewedUserId`      INT          NOT NULL, 
+    `negativeFeedbackId`  INT          NOT NULL, 
+    `updatedAt`           TIMESTAMP    NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`           TIMESTAMP    NOT NULL    DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- User Table Create SQL
+CREATE TABLE SMSCheck
+(
+    `id`           INT            NOT NULL    AUTO_INCREMENT, 
+    `phoneNumber`  VARCHAR(45)    NOT NULL, 
+    `authNumber`   INT            NOT NULL, 
+    `updatedAt`    TIMESTAMP      NOT NULL    DEFAULT current_timestamp on update current_timestamp, 
+    `createdAt`    TIMESTAMP      NOT NULL    DEFAULT CURRENT_TIMESTAMP, 
+    PRIMARY KEY (id)
+);
+
+
